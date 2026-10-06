@@ -1,4 +1,4 @@
-<img width="1919" height="1079" alt="Screenshot 2026-09-24 031914" src="https://github.com/user-attachments/assets/c87688fa-15fa-4771-8091-661bb46e155e" /># Codera HUD
+<img width="1919" height="1079" alt="Screenshot 2026-09-24 031914" src="https://github.com/user-attachments/assets/c87688fa-15fa-4771-8091-661bb46e155e" />
 <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/1bb099af-a9ee-4e6a-9e68-ddbe893c57db" />
 
 <img width="1919" height="1079" alt="Screenshot 2026-09-27 040128" src="https://github.com/user-attachments/assets/d63af814-8955-4410-a251-9a3262ac179b" />
