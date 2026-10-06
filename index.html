@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codera HUD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,600;0,700;0,800;0,900;1,700;1,800;1,900&family=Barlow+Semi+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css?v=4">
+    <link rel="stylesheet" href="css/player.css?v=16">
+    <link rel="stylesheet" href="css/vehicle-controls-final.css">
+    <link rel="stylesheet" href="css/minimap.css?v=58">
+    <link rel="stylesheet" href="css/settings.css?v=1">
+    <link rel="stylesheet" href="css/chat.css?v=1">
+</head>
+<body>
+    <svg width="0" height="0" aria-hidden="true" focusable="false">
+        <defs>
+            <clipPath id="waypoint-arc-clip" clipPathUnits="objectBoundingBox">
+                <path d="M 0 0 H 0.765 C 0.81 0.24 0.91 0.70 1 1 H 0 Z"></path>
+            </clipPath>
+        </defs>
+    </svg>
+    <main id="hud-root">
+        <section class="player-hud" id="player-hud" aria-label="Player status">
+            <div class="codera-chat" id="codera-chat">
+                <div class="codera-chat__messages" id="chat-messages"></div>
+                <div class="codera-chat__suggestions" id="chat-suggestions"></div>
+                <div class="codera-chat__bar" id="chat-bar">
+                    <div class="codera-chat__bar-inner">
+                        <i class="fa-solid fa-comment-dots codera-chat__icon" aria-hidden="true"></i>
+                        <input type="text" id="chat-input" class="codera-chat__input" autocomplete="off" spellcheck="false" maxlength="120">
+                    </div>
+                </div>
+            </div>
+
+            <div class="voice-badge" id="player-mic" data-mode="2">
+                <i class="fa-solid fa-microphone voice-icon" id="player-mic-icon"></i>
+            </div>
+            <div class="voice-divider" aria-hidden="true"></div>
+
+            <div class="player-hud__stats">
+                <div class="player-hud__bars">
+                    <div class="player-hud__bar player-hud__bar--health">
+                        <div class="player-hud__bar-label">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                            <span>HEALTH</span>
+                        </div>
+                        <div class="player-hud__bar-track">
+                            <div class="player-hud__bar-fill" id="health-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="player-hud__bar player-hud__bar--armor">
+                        <div class="player-hud__bar-label">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>ARMOR</span>
+                        </div>
+                        <div class="player-hud__bar-track">
+                            <div class="player-hud__bar-fill" id="armor-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="player-hud__needs">
+                    <div class="player-hud__need-item">
+                        <div class="player-hud__need-track player-hud__need-track--hunger">
+                            <div class="player-hud__need-fill player-hud__need-fill--hunger" id="hunger-fill"></div>
+                        </div>
+                        <div class="player-hud__need-icon">
+                            <svg class="player-hud__need food-icon" id="hunger-icon" viewBox="0 0 32 32" aria-hidden="true">
+                                <path d="M11.2 11.4h13.6a1.8 1.8 0 0 1 1.8 1.8v.7H9.4v-.7a1.8 1.8 0 0 1 1.8-1.8Zm-2 5h17.6a1.5 1.5 0 0 1 0 3H9.2a1.5 1.5 0 0 1 0-3Zm1.3 5.5h15l-1.1 4.2a2.2 2.2 0 0 1-2.1 1.6h-8.6a2.2 2.2 0 0 1-2.1-1.6l-1.1-4.2Z" fill="#fff"></path>
+                                <path d="M5.2 5v8.2M3.2 5v4.3c0 1.2.9 2.1 2 2.1s2-.9 2-2.1V5M5.2 11.4v16.3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"></path>
+                                <path d="M15.2 8.8c.4-2 2-3.5 4-3.8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="player-hud__need-item">
+                        <div class="player-hud__need-track player-hud__need-track--thirst">
+                            <div class="player-hud__need-fill player-hud__need-fill--thirst" id="thirst-fill"></div>
+                        </div>
+                        <div class="player-hud__need-icon">
+                            <svg class="player-hud__need drink-icon" id="thirst-icon" viewBox="0 0 32 32" aria-hidden="true">
+                                <path d="M9 9h15l-1.6 18.2a2 2 0 0 1-2 1.8h-7.8a2 2 0 0 1-2-1.8L9 9Z" fill="#fff"></path>
+                                <path d="m17.5 10 2-7h5.2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M12.1 14.5c2.9-1.4 6.1 1.7 9.8.1" fill="none" stroke="#171717" stroke-width="1.6" stroke-linecap="round"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swim-badge" id="player-swim" aria-label="Swimming">
+                <i class="fa-solid fa-lungs swim-badge__icon"></i>
+            </div>
+
+            <div class="dev-badge" id="player-devmode" aria-label="Developer mode active">
+                <i class="fa-solid fa-code dev-badge__icon"></i>
+            </div>
+        </section>
+
+        <section class="center-status" aria-label="Temporary status bars">
+            <div class="center-status__item" id="stamina-container">
+                <i class="fa-solid fa-person-running center-status__icon" id="stamina-icon"></i>
+                <div class="center-status__track">
+                    <div class="center-status__fill" id="stamina-fill"></div>
+                </div>
+            </div>
+
+            <div class="center-status__item" id="oxygen-container">
+                <i class="fa-solid fa-person-swimming center-status__icon" id="oxygen-icon"></i>
+                <div class="center-status__track">
+                    <div class="center-status__fill center-status__fill--oxygen" id="oxygen-fill"></div>
+                </div>
+            </div>
+
+            <div class="center-status__item" id="engine-container">
+                <i class="fa-solid fa-car-burst center-status__icon" id="engine-icon"></i>
+                <div class="center-status__track">
+                    <div class="center-status__fill" id="engine-fill"></div>
+                </div>
+            </div>
+
+            <div class="center-status__item" id="nos-container">
+                <i class="fa-solid fa-bolt center-status__icon" id="nos-icon"></i>
+                <div class="center-status__track">
+                    <div class="center-status__fill center-status__fill--nos" id="nos-fill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="weapon-hud" id="weapon-hud" aria-label="Ammunition">
+            <i class="fa-solid fa-gun weapon-hud__icon"></i>
+            <span class="weapon-hud__clip" id="ammo-clip">0</span>
+            <span class="weapon-hud__separator">|</span>
+            <span class="weapon-hud__total" id="ammo-total">0</span>
+        </section>
+
+        <div class="crosshair" id="crosshair">
+            <div class="crosshair__dot"></div>
+        </div>
+
+        <div class="vehicle-hud-row" id="vehicle-hud-row">
+        <section class="vehicle-controls" id="vehicle-controls" aria-label="Vehicle controls">
+            <div class="vehicle-controls__item">
+                <div class="vehicle-controls__key vehicle-controls__key--icon" id="vc-engine-key">
+                    <svg viewBox="0 0 34 46" width="26" height="35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="5" y="2" width="24" height="30" rx="11" stroke="currentColor" stroke-width="3"/>
+                        <line x1="17" y1="9" x2="17" y2="16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="9.5,19.5 24.5,19.5 17,28.5" fill="currentColor"/>
+                        <rect x="11" y="40" width="12" height="4" rx="2" fill="currentColor"/>
+                    </svg>
+                </div>
+                <span class="vehicle-controls__label" id="vc-engine-label">Stop Engine</span>
+            </div>
+            <span class="vehicle-controls__divider">/</span>
+            <div class="vehicle-controls__item">
+                <div class="vehicle-controls__key">L</div>
+                <span class="vehicle-controls__label">Vehicle Lock</span>
+            </div>
+            <span class="vehicle-controls__divider">/</span>
+            <div class="vehicle-controls__item">
+                <div class="vehicle-controls__key">H</div>
+                <span class="vehicle-controls__label">Headlights</span>
+            </div>
+            <span class="vehicle-controls__divider">/</span>
+            <div class="vehicle-controls__item">
+                <div class="vehicle-controls__key">E</div>
+                <span class="vehicle-controls__label">Horn</span>
+            </div>
+            <span class="vehicle-controls__divider">/</span>
+            <div class="vehicle-controls__item">
+                <div class="vehicle-controls__key">F</div>
+                <span class="vehicle-controls__label">Exit</span>
+            </div>
+        </section>
+
+        <section class="vehicle-hud" id="vehicle-hud" aria-label="Vehicle status">
+            <div class="speedometer">
+                <svg class="speedometer__gauges" viewBox="0 0 200 200">
+                    <defs>
+                        <linearGradient id="speedometer-bg-gradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#1e1e1e" stop-opacity="0.88" />
+                            <stop offset="35%" stop-color="#141414" stop-opacity="0.60" />
+                            <stop offset="70%" stop-color="#0a0a0a" stop-opacity="0.20" />
+                            <stop offset="90%" stop-color="#050505" stop-opacity="0.03" />
+                            <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+                        </linearGradient>
+                        <mask id="rpm-segments-mask">
+                            <path
+                                fill="none"
+                                stroke="white"
+                                stroke-width="9"
+                                stroke-dasharray="11.27 3.18"
+                                d="M -7.1,165.1 A 92,92 0 1,1 123.1,165.1"
+                            />
+                        </mask>
+                        <mask id="rpm-progress-mask">
+                            <path
+                                class="speedometer__rpm-progress"
+                                id="rpm-progress-path"
+                                pathLength="100"
+                                stroke-dasharray="100"
+                                stroke-dashoffset="100"
+                                d="M -7.1,165.1 A 92,92 0 1,1 123.1,165.1"
+                            />
+                        </mask>
+                    </defs>
+
+                    <circle class="speedometer__bg" cx="58" cy="100" r="96" fill="url(#speedometer-bg-gradient)" />
+                    <path class="speedometer__rpm-bg" d="M -7.1,165.1 A 92,92 0 1,1 123.1,165.1" />
+                    <g mask="url(#rpm-progress-mask)">
+                        <g mask="url(#rpm-segments-mask)">
+                            <path
+                                class="speedometer__rpm-fill speedometer__rpm-fill--low"
+                                pathLength="100"
+                                stroke-dasharray="30 70"
+                                d="M -7.1,165.1 A 92,92 0 1,1 123.1,165.1"
+                            />
+                            <path
+                                class="speedometer__rpm-fill speedometer__rpm-fill--mid"
+                                pathLength="100"
+                                stroke-dasharray="0 30 35 35"
+                                d="M -7.1,165.1 A 92,92 0 1,1 123.1,165.1"
+                            />
+                            <path
+                                class="speedometer__rpm-fill speedometer__rpm-fill--high"
+                                pathLength="100"
+                                stroke-dasharray="0 65 35 0"
+                                d="M -7.1,165.1 A 92,92 0 1,1 123.1,165.1"
+                            />
+                        </g>
+                    </g>
+
+                    <path class="speedometer__fuel-bg" id="fuel-bg" d="M 144.85,158.44 L 151.15,163.36 A 103,103 0 0,0 157.39,45.38 L 150.61,49.62 A 95,95 0 0,1 144.85,158.44 Z" />
+                    <path
+                        class="speedometer__fuel-fill"
+                        id="fuel-path"
+                        pathLength="100"
+                        stroke-dasharray="100"
+                        stroke-dashoffset="100"
+                        d="M 148.0,160.9 A 99,99 0 0,0 154.0,47.5"
+                    />
+                </svg>
+
+                <div class="speedometer__center">
+                    <div class="speedometer__gear" id="vehicle-gear">N</div>
+                    <span class="speedometer__gear-label">GEAR</span>
+                    <span class="speedometer__speed" id="vehicle-speed"><span class="speedometer__digit speedometer__digit--dim">0</span><span class="speedometer__digit speedometer__digit--dim">0</span><span class="speedometer__digit speedometer__digit--dim">0</span></span>
+                    <span class="speedometer__unit" id="vehicle-speed-unit">MPH</span>
+                </div>
+
+                <div class="speedometer__fuel-icon" id="fuel-icon">
+                    <i class="fa-solid fa-gas-pump" id="fuel-type-icon"></i>
+                    <i class="fa-solid fa-caret-right speedometer__fuel-arrow"></i>
+                </div>
+
+                <div class="speedometer__icons">
+                    <div class="speedometer__icon" id="lights-icon">
+                        <i class="fa-regular fa-lightbulb"></i>
+                    </div>
+                    <div class="speedometer__icon" id="seatbelt-icon">
+                        <i class="fa-solid fa-user-slash"></i>
+                    </div>
+                    <div class="speedometer__icon speedometer__icon--muted" id="lock-icon">
+                        <i class="fa-solid fa-unlock"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div>
+
+        <section class="compass" id="compass" aria-label="Minimap compass">
+            <div class="compass__degree"><span id="heading-degree">240</span>&deg;</div>
+            <div class="compass__ring">
+                <div class="compass__border"></div>
+                <div class="compass__letters" id="compass-letters">
+                    <span class="compass__intercardinal compass__intercardinal--ne" aria-hidden="true"></span>
+                    <span class="compass__intercardinal compass__intercardinal--se" aria-hidden="true"></span>
+                    <span class="compass__intercardinal compass__intercardinal--sw" aria-hidden="true"></span>
+                    <span class="compass__intercardinal compass__intercardinal--nw" aria-hidden="true"></span>
+                    <span class="compass__tick compass__tick--north" aria-hidden="true"></span>
+                    <span class="compass__tick compass__tick--east" aria-hidden="true"></span>
+                    <span class="compass__tick compass__tick--south" aria-hidden="true"></span>
+                    <span class="compass__tick compass__tick--west" aria-hidden="true"></span>
+                    <div class="compass__letter compass__letter--north">N</div>
+                    <div class="compass__letter compass__letter--east">E</div>
+                    <div class="compass__letter compass__letter--south">S</div>
+                    <div class="compass__letter compass__letter--west">W</div>
+                </div>
+            </div>
+            <div class="compass__waypoint" id="compass-waypoint">
+                <i class="fa-solid fa-arrow-up compass__waypoint-icon" id="waypoint-arrow-icon"></i>
+                <span class="compass__waypoint-distance" id="waypoint-distance">0.00 mi</span>
+            </div>
+            <div class="compass__location">
+                <div class="compass__zone" id="zone">GALILEE</div>
+                <div class="compass__street" id="street">NORTH CALAFIA WAY</div>
+            </div>
+        </section>
+
+        <section class="safezone-warning" id="safezone-warning" role="alert">
+            <div class="safezone-warning__panel">
+                <div class="safezone-warning__header">
+                    <div class="safezone-warning__icon" aria-hidden="true">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="safezone-warning__heading">
+                        <span>HUD CALIBRATION</span>
+                        <h1>Safezone needs adjustment</h1>
+                    </div>
+                </div>
+
+                <p class="safezone-warning__description">
+                    Your current display area is too small. Set the safezone to maximum
+                    so the minimap and HUD align correctly.
+                </p>
+
+                <div class="safezone-warning__route" aria-label="Settings navigation path">
+                    <span class="safezone-warning__key">ESC</span>
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                    <span>Settings</span>
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                    <span>Display</span>
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                    <span>Safezone Size</span>
+                </div>
+
+                <div class="safezone-warning__instruction">
+                    <p>Drag the <strong>Safezone Size</strong> slider all the way to the right.</p>
+                    <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
+                </div>
+            </div>
+        </section>
+
+        <div class="cinematic-bar cinematic-bar--top" id="cinematic-top"></div>
+        <div class="cinematic-bar cinematic-bar--bottom" id="cinematic-bottom"></div>
+    </main>
+
+
+    <!-- /hudsettings menu -->
+    <div class="hs-menu" id="hs-menu" hidden role="dialog" aria-modal="true" aria-labelledby="hs-title">
+        <div class="hs-panel" id="hs-panel" tabindex="-1">
+            <header class="hs-head">
+                <div class="hs-head__title">
+                    <span class="hs-eyebrow">Quick menu</span>
+                    <h1 id="hs-title">HUD settings</h1>
+                </div>
+                <div class="hs-head__right">
+                    <span class="hs-head__page" id="hs-page-name">HUD layout</span>
+                    <button class="hs-close" id="hs-close" type="button" aria-label="Close menu (Escape)">
+                        <b>ESC</b><span>Close</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="hs-body">
+                <nav class="hs-nav" role="tablist" aria-label="Settings sections">
+                    <button class="hs-nav__item is-active" type="button" role="tab" data-page="layout" aria-selected="true"><i>01</i><span>HUD layout</span></button>
+                    <button class="hs-nav__item" type="button" role="tab" data-page="map" aria-selected="false"><i>02</i><span>Map &amp; compass</span></button>
+                    <button class="hs-nav__item" type="button" role="tab" data-page="player" aria-selected="false"><i>03</i><span>Player status</span></button>
+                    <button class="hs-nav__item" type="button" role="tab" data-page="vehicle" aria-selected="false"><i>04</i><span>Vehicle</span></button>
+                    <button class="hs-nav__item" type="button" role="tab" data-page="general" aria-selected="false"><i>05</i><span>General</span></button>
+
+                    <div class="hs-nav__foot">
+                        <span class="hs-nav__preview">Live preview</span>
+                        <span class="hs-nav__state" id="hs-save-state" role="status">Saved</span>
+                    </div>
+                </nav>
+
+                <main class="hs-main" id="hs-main">
+                    <section class="hs-page" id="hs-page-layout" data-page="layout">
+                        <header class="hs-page__head">
+                            <span class="hs-eyebrow">Position &amp; size</span>
+                            <h2>Customize HUD layout</h2>
+                            <p>Move every HUD element anywhere on the screen and resize it independently.</p>
+                        </header>
+
+                        <div class="hs-callout">
+                            <div class="hs-callout__text">
+                                <span class="hs-eyebrow">Live screen editor</span>
+                                <h3>Drag, move and resize</h3>
+                                <p>Select a HUD element, move it, then use the size slider for precise scaling.</p>
+                            </div>
+                            <button class="hs-btn hs-btn--cyan" id="hs-open-editor" type="button">Open layout editor</button>
+                        </div>
+
+                        <ol class="hs-steps">
+                            <li><b>01</b><span>Select element</span></li>
+                            <li><b>02</b><span>Drag anywhere</span></li>
+                            <li><b>03</b><span>Adjust size</span></li>
+                            <li><b>04</b><span>Saved automatically</span></li>
+                        </ol>
+                    </section>
+
+                    <section class="hs-page" id="hs-page-dynamic" hidden></section>
+                </main>
+            </div>
+
+            <footer class="hs-foot">
+                <span class="hs-foot__brand" id="hs-brand">CODERA HUD / Personal settings</span>
+                <div class="hs-foot__actions">
+                    <button class="hs-btn hs-btn--line" id="hs-reset-layout" type="button">Reset HUD</button>
+                    <button class="hs-btn hs-btn--cyan" id="hs-reset-all" type="button">Reset all settings</button>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Layout editor -->
+    <div class="hs-editor" id="hs-editor" tabindex="-1" hidden>
+        <div class="hs-editor__grid" aria-hidden="true"></div>
+        <div class="hs-handles" id="hs-handles"></div>
+
+        <div class="hs-toolbar" role="toolbar" aria-label="Layout editor">
+            <div class="hs-toolbar__name">
+                <span class="hs-eyebrow">Layout editor</span>
+                <strong id="hs-sel-name">Minimap &amp; compass</strong>
+            </div>
+            <label class="hs-toolbar__size" for="hs-size">
+                <span>Size</span>
+                <input type="range" id="hs-size" min="40" max="200" step="1" value="100">
+                <output id="hs-size-out" for="hs-size">100%</output>
+            </label>
+            <button class="hs-btn hs-btn--line" id="hs-el-reset" type="button">Reset element</button>
+            <button class="hs-btn hs-btn--cyan" id="hs-editor-done" type="button">Done</button>
+        </div>
+
+        <p class="hs-editor__hint">Click an element to select it, then drag it. Arrow keys nudge 1 px, Shift + arrow nudges 10 px. Esc returns to the menu.</p>
+    </div>
+
+    <script src="js/player.js?v=4"></script>
+    <script src="js/vehicle-controls-final.js"></script>
+    <script src="js/minimap.js?v=5"></script>
+    <script src="js/settings.js?v=1"></script>
+    <script src="js/chat.js?v=1"></script>
+</body>
+</html>
