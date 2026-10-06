@@ -1,6 +1,8 @@
 # codera-hud
 
 A full-screen FiveM HUD with status bars, speedometer, compass, circular radar, a per-player layout editor and a built-in chat. It supports QBox, QBCore and ESX out of the box and can be wired to any other framework through a small adapter.
+<img width="1919" height="1079" alt="657644549-c87688fa-15fa-4771-8091-661bb46e155e" src="https://github.com/user-attachments/assets/9fdc34f1-d63e-4b19-ba38-d2368d99988b" />
+<img width="1919" height="1079" alt="659827967-8da39018-91be-434d-9c07-3e1549ceb715" src="https://github.com/user-attachments/assets/f992d2f8-f544-4040-a703-a7794452c6fc" />
 
 ## Features
 
