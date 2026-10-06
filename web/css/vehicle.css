@@ -1,0 +1,232 @@
+.vehicle-hud {
+    position: absolute;
+    right: calc(2vw + 35px);
+    bottom: 12px;
+    display: none;
+    align-items: center;
+    font-family: "Barlow Semi Condensed", "Barlow", sans-serif;
+    transform: scale(0.88);
+    transform-origin: bottom right;
+}
+
+.speedometer {
+    position: relative;
+    display: flex;
+    width: 200px;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+}
+
+.speedometer__gauges {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.speedometer__bg {
+    pointer-events: none;
+}
+
+.speedometer__rpm-bg {
+    fill: none;
+    stroke: rgba(40, 40, 40, 0.9);
+    stroke-width: 7.5;
+    stroke-linecap: butt;
+    stroke-dasharray: 23.15 2.5;
+}
+
+.speedometer__rpm-fill {
+    fill: none;
+    stroke-width: 7.5;
+    stroke-linecap: butt;
+}
+
+.speedometer__rpm-progress {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 9;
+    stroke-linecap: butt;
+    transition: stroke-dashoffset 0.05s linear;
+}
+
+.speedometer__rpm-fill--low {
+    stroke: #fff;
+}
+
+.speedometer__rpm-fill--mid {
+    stroke: #f1c40f;
+}
+
+.speedometer__rpm-fill--high {
+    stroke: #e74c3c;
+}
+
+.speedometer__fuel-bg {
+    fill: rgba(30, 30, 30, 0.9);
+    stroke: #ffffff;
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    transition: stroke 0.3s;
+}
+
+.speedometer__fuel-fill {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 6;
+    stroke-linecap: butt;
+    transition: stroke-dashoffset 0.5s ease, stroke 0.3s;
+}
+
+.speedometer__center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    transform: translateX(-42px);
+    font-family: "Barlow Semi Condensed", "Barlow", sans-serif;
+    text-align: center;
+}
+
+.speedometer__gear {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 2px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 900;
+    font-style: italic;
+}
+
+.speedometer__gear-label {
+    margin-bottom: 4px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+}
+
+.speedometer__speed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0;
+    color: #fff;
+    font-size: 60px;
+    font-style: italic;
+    font-weight: 900;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.speedometer__digit {
+    display: inline-block;
+    width: 34px;
+    text-align: center;
+}
+
+.speedometer__digit--dim {
+    color: rgba(255, 255, 255, 0.28);
+    text-shadow: none;
+}
+
+.speedometer__unit {
+    align-self: flex-end;
+    width: 34px;
+    margin-top: 1px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 11px;
+    font-style: italic;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-align: center;
+}
+
+.speedometer__fuel-icon {
+    position: absolute;
+    top: 52%;
+    right: -7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    transform: translateY(-50%);
+    color: #ffffff;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.speedometer__fuel-arrow {
+    font-size: 11px;
+}
+
+.speedometer__fuel-icon--low {
+    color: #e74c3c;
+    animation: hud-flash 1s infinite;
+}
+
+.speedometer__icons {
+    position: absolute;
+    top: 50%;
+    right: -50px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transform: translateY(-50%);
+}
+
+.speedometer__icon {
+    display: flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(15, 15, 15, 0.9);
+    color: #fff;
+    font-size: 12px;
+    opacity: 0.4;
+    transition: opacity 0.3s, color 0.3s;
+}
+
+.speedometer__icon--lights {
+    color: #f1c40f;
+    opacity: 1;
+}
+
+.speedometer__icon--seatbelt-off {
+    color: #e74c3c;
+    opacity: 1;
+    animation: hud-flash 1s infinite;
+}
+
+.speedometer__icon--seatbelt-on {
+    color: #2ecc71;
+    opacity: 1;
+}
+
+.speedometer__icon--locked {
+    color: #e74c3c;
+    opacity: 1;
+}
+
+.speedometer__icon--muted {
+    color: #fff;
+    opacity: 0.4;
+}
+
+@keyframes hud-flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
