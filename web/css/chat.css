@@ -1,0 +1,198 @@
+.codera-chat {
+    position: relative;
+    display: none;
+    align-items: center;
+    height: 35px;
+}
+
+@keyframes codera-chat-mount-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.player-hud.chat-active .codera-chat {
+    display: flex;
+    animation: codera-chat-mount-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.codera-chat__messages {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: max-content;
+    max-width: 60vw;
+    pointer-events: none;
+}
+
+.codera-chat__message {
+    display: inline-flex;
+    max-width: 100%;
+    padding: 6px 10px;
+    border-radius: 4px;
+    background: rgba(15, 15, 15, 0.82);
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    line-height: 1.3;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    opacity: 1;
+    transition: opacity 0.4s ease;
+    word-break: break-word;
+    animation: codera-chat-message-in 0.18s ease both;
+}
+
+@keyframes codera-chat-message-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.codera-chat__message.is-fading {
+    opacity: 0;
+}
+
+.codera-chat__message--me {
+    background: rgba(15, 15, 15, 0.82);
+    color: #c9a7ff;
+    font-style: italic;
+}
+
+.codera-chat__message--me .codera-chat__message-text {
+    color: #c9a7ff;
+}
+
+.codera-chat__message--ooc .codera-chat__message-author {
+    color: #9aa0a6;
+}
+
+.codera-chat__message--ooc .codera-chat__message-text {
+    color: rgba(255, 255, 255, 0.75);
+    font-style: italic;
+}
+
+.codera-chat__message-author {
+    margin-right: 4px;
+    font-weight: 700;
+}
+
+.codera-chat__suggestions {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    z-index: 1;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    width: max-content;
+    min-width: var(--chat-input-width, 340px);
+    max-width: 60vw;
+    pointer-events: none;
+}
+
+.codera-chat.is-open .codera-chat__suggestions.has-items {
+    display: flex;
+}
+
+.codera-chat__suggestion {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 8px 14px;
+    background: rgba(15, 15, 15, 0.82);
+    border-left: 3px solid transparent;
+    animation: codera-chat-message-in 0.15s ease both;
+}
+
+.codera-chat__suggestion.is-selected {
+    background: rgba(15, 40, 43, 0.92);
+    border-left-color: #2dd4e3;
+}
+
+.codera-chat__suggestion-name {
+    flex: 0 0 auto;
+    color: #2dd4e3;
+    font-family: "Barlow Semi Condensed", "Inter", sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.codera-chat__suggestion-desc {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.codera-chat__bar {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 0;
+    margin-right: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    background: rgba(15, 15, 15, 0.8);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+        width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        margin-right 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.22s ease-out,
+        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.15s ease;
+}
+
+.codera-chat__bar:focus-within {
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+.codera-chat.is-open .codera-chat__bar {
+    width: var(--chat-input-width, 340px);
+    margin-right: 6px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.codera-chat__bar-inner {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    width: var(--chat-input-width, 340px);
+    height: 100%;
+    padding: 0 14px;
+}
+
+.codera-chat__icon {
+    flex: 0 0 auto;
+    color: #fff;
+    font-size: 15px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.codera-chat__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+}
+
+.codera-chat__input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
